@@ -44,3 +44,6 @@ yarn-error.log*
 # vaqtinchalik: kontentni backendga ko'chirish uchun ishlatilgan
 /export
 next-env.d.ts
+
+# deploy.sh yaratadigan arxiv
+/gspi-front-deploy.tar.gz

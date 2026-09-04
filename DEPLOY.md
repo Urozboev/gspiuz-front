@@ -36,6 +36,8 @@ hech qachon chiqmaydi** va CORS sozlash kerak emas.
 
 - **Node.js 20 yoki undan yuqori** — cPanel → Software → *Setup Node.js App*
 - Backend `admin.gspi.uz` da ishlab turgan bo'lishi va HTTPS bo'lishi
+- Serverda **~40 MB bo'sh joy** va **~3 000 ta bo'sh inode**
+  (build mahalliy kompyuterda qilinadi, pastga qarang)
 
 ## Muhit o'zgaruvchilari
 
@@ -75,19 +77,43 @@ server tomonda o'qiladi va brauzer bundle'iga tushmaydi.
 
 ## cPanel'ga o'rnatish
 
-### 1. Kodni serverga olib chiqish
+> **Nega serverda `npm install` qilinmaydi.** Shared hostingda u
+> **442 MB va 25 000 fayl** talab qiladi — ahost kvotasi bunga yetmaydi
+> (`npm error Unknown system error -122` = disk kvotasi tugadi).
+>
+> Buning o'rniga build mahalliy kompyuterda qilinadi va serverga faqat
+> kerakli qismi yuklanadi: **~28 MB, ~2 500 fayl**. Next.js'ning
+> `output: "standalone"` rejimi qaysi modullar haqiqatan kerakligini
+> aniqlab, faqat o'shalarni ko'chiradi.
 
-cPanel → **Git™ Version Control** → Create:
-```
-Clone URL:  https://github.com/Urozboev/gspiuz-front.git
-Repository Path:  /home/<user>/gspiuz-front
-```
-SSH bo'lsa qo'lda ham bo'ladi:
+### 1. Mahalliy kompyuterda paket tayyorlash
+
 ```bash
-git clone https://github.com/Urozboev/gspiuz-front.git
+BACKEND_URL=https://admin.gspi.uz BACKEND_API_PREFIX=<maxfiy prefiks> NEXT_PUBLIC_SITE_URL=https://gspi.uz ./deploy.sh
 ```
 
-### 2. Node.js ilovasini yaratish
+Skript quyidagilarni qiladi:
+- `BACKEND_URL` berilmagan yoki `https` emasligini **tekshiradi va to'xtaydi**
+- Build qiladi (manzil shu paytda muhrlanadi)
+- `.next/static` va `public` ni standalone ichiga ko'chiradi
+  (Next buni o'zi qilmaydi — hujjatlashtirilgan xatti-harakat)
+- `gspi-front-deploy.tar.gz` arxivini yaratadi
+
+### 2. Serverga yuklash
+
+cPanel → **File Manager** → `~/gspiuz-front/` papkasiga arxivni yuklang va
+**Extract** qiling. Natijada shunday tuzilma bo'ladi:
+
+```
+~/gspiuz-front/
+  server.js        ← Next o'zi yaratgan ishga tushirish fayli
+  package.json
+  node_modules/    ← faqat kerakli modullar (~20 MB)
+  .next/
+  public/
+```
+
+### 3. Node.js ilovasini yaratish
 
 cPanel → Software → **Setup Node.js App** → Create Application:
 
@@ -99,38 +125,24 @@ cPanel → Software → **Setup Node.js App** → Create Application:
 | Application URL | `gspi.uz` |
 | Application startup file | `server.js` |
 
-Shu ekranda **Environment variables** bo'limiga yuqoridagi to'rtta
-o'zgaruvchini qo'shing.
+**"Run NPM Install" tugmasini bosmang** — modullar allaqachon arxiv ichida
+kelgan, bosilsa kvota yana tugaydi.
 
-### 3. O'rnatish va build
-
-cPanel ekranidagi **"Run NPM Install"** tugmasini bosing, so'ng shu yerdagi
-terminal (yoki SSH) orqali:
-
-```bash
-npm run build
-```
-
-Build ~1–2 daqiqa oladi va ~1 GB xotira talab qiladi. Shared hostingda
-xotira yetmasa, buildni mahalliy kompyuterda (yuqoridagi env'lar bilan)
-qilib, `.next/` papkasini serverga yuklang.
+Environment variables bo'limiga `NEXT_PUBLIC_SITE_URL` va
+`NEXT_PUBLIC_API_URL` ni qo'shing. `BACKEND_URL` va `BACKEND_API_PREFIX`
+build ichida muhrlangan, lekin bir xillik uchun ularni ham kiritib qo'ying.
 
 ### 4. Ishga tushirish
 
-cPanel ekranida **Restart** tugmasi. `server.js` Passenger bergan portda
-Next.js'ni ko'taradi.
+**Restart** tugmasi.
 
 ## Yangilash
 
-```bash
-cd ~/gspiuz-front
-git pull
-npm ci
-npm run build
-```
-so'ng cPanel'da **Restart**.
+Kod o'zgargach, 1-qadamni takrorlab yangi arxiv yarating va serverdagi
+fayllar ustiga yozing, so'ng **Restart**.
 
-Build muvaffaqiyatli tugamaguncha eski versiya ishlab turaveradi.
+Agar `admin.gspi.uz` manzili o'zgarsa — **albatta qayta build qiling**,
+faqat env'ni o'zgartirish yetarli emas.
 
 ## Xavfsizlik sarlavhalari
 
@@ -143,8 +155,9 @@ qo'yilgan sarlavha brauzerni chalkashtiradi.
 
 ## Chiqishdan oldin tekshiriladiganlar
 
-- [ ] `npm run build` xatosiz o'tadi
-- [ ] To'rtala env o'zgaruvchisi cPanel'da kiritilgan
+- [ ] `./deploy.sh` xatosiz o'tadi va arxiv yaratiladi
+- [ ] Arxiv `~/gspiuz-front/` ga ochilgan, `server.js` ildizda turibdi
+- [ ] cPanel'da "Run NPM Install" **bosilmagan**
 - [ ] `BACKEND_URL` **`https://`** bilan boshlanadi
 - [ ] `BACKEND_API_PREFIX` backenddagi `API_PREFIX` bilan aynan bir xil
 - [ ] Backend `admin.gspi.uz` da ishlayapti va HTTPS sertifikati bor
