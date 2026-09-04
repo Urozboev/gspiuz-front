@@ -1,102 +1,129 @@
-# GSPI frontend — production'ga chiqarish
+# GulDPI frontend — production'ga chiqarish
 
-Next.js 16 (App Router). Backend — Laravel (`gspi-backend`), API maxfiy prefiks ostida.
+Next.js 16 (App Router). Backend — Laravel (`gspi-backend`), **boshqa serverda**,
+API maxfiy prefiks ostida.
 
 ## Arxitektura
 
-Bitta serverda:
+Frontend va backend **ikki xil mashinada**:
 
 ```
-Internet → nginx (443)
-             ├── /upload/, /storage/  → Laravel public/ (nginx to'g'ridan-to'g'ri diskdan)
-             ├── /admin/, /login      → php-fpm (admin panel)
-             └── /                    → 127.0.0.1:3000 (Next.js)
-                                          └── /api/* ni ichkaridan
-                                              127.0.0.1:8000/<maxfiy-prefiks>/* ga uzatadi
+                    ┌─────────────────────────────────────┐
+gspi.uz     ──────► │ ahost (shared hosting, cPanel)      │
+                    │ Node.js App → Next.js (server.js)   │
+                    └──────────────┬──────────────────────┘
+                                   │ HTTPS
+                                   │ /<maxfiy-prefiks>/*
+                                   ▼
+                    ┌─────────────────────────────────────┐
+admin.gspi.uz ────► │ institut serveri                    │
+                    │ nginx + php-fpm → Laravel           │
+                    │ API · admin panel · yuklangan fayllar│
+                    └─────────────────────────────────────┘
 ```
 
-API tashqariga umuman ochilmaydi — Next server tomonda proxy qiladi.
-Brauzer faqat `/api/*` ni ko'radi, haqiqiy prefiks hech qachon chiqmaydi.
-Shu sababli CORS sozlash ham kerak emas.
+Brauzer faqat `gspi.uz/api/*` ni ko'radi. Next server bu so'rovlarni
+`admin.gspi.uz/<maxfiy-prefiks>/*` ga uzatadi — **maxfiy prefiks brauzerga
+hech qachon chiqmaydi** va CORS sozlash kerak emas.
+
+> **Ilgari** ikkalasi bitta serverda deb rejalashtirilgandi va API tashqi
+> internetga umuman ochilmasdi. Endi so'rovlar ochiq internet orqali o'tadi,
+> shuning uchun `BACKEND_URL` **majburiy `https://`** bo'lishi va backend
+> tomonida API ahost IP'si bilan cheklanishi kerak
+> (`gspi-backend/DEPLOY.md` ga qarang).
 
 ## Talablar
 
-- Node.js 20 yoki undan yuqori
-- PHP 8.4 + MariaDB (backend uchun, `gspi-backend/DEPLOY.md` ga qarang)
-- nginx, certbot
+- **Node.js 20 yoki undan yuqori** — cPanel → Software → *Setup Node.js App*
+- Backend `admin.gspi.uz` da ishlab turgan bo'lishi va HTTPS bo'lishi
 
 ## Muhit o'zgaruvchilari
 
-Serverda `.env.production.local` (git'ga tushmaydi):
+cPanel'dagi Node.js App sozlamalarida (yoki serverdagi `.env.local` faylida):
 
-```
-BACKEND_URL=http://127.0.0.1:8000
-BACKEND_API_PREFIX=<Laravel RouteServiceProvider'dagi maxfiy prefiks>
+```ini
+# Backend manzili — MAJBURIY https, aks holda prefiks va kontent yo'lda ko'rinadi
+BACKEND_URL=https://admin.gspi.uz
+
+# Laravel'ning maxfiy API prefiksi.
+# Backenddagi .env dagi API_PREFIX bilan AYNAN bir xil bo'lishi shart.
+BACKEND_API_PREFIX=<maxfiy prefiks>
+
+# Brauzer tomonidagi API bazasi — "/api" qoldiriladi (proxy orqali)
 NEXT_PUBLIC_API_URL=/api
+
+# Kanonik manzil — sitemap, robots.txt, Open Graph va JSON-LD uchun
 NEXT_PUBLIC_SITE_URL=https://gspi.uz
 ```
 
-`BACKEND_API_PREFIX` — maxfiy. Faqat server tomonda o'qiladi,
-`NEXT_PUBLIC_` prefiksi yo'q, ya'ni brauzer bundlega tushmaydi.
+`BACKEND_API_PREFIX` da `NEXT_PUBLIC_` prefiksi **yo'q** — demak u faqat
+server tomonda o'qiladi va brauzer bundle'iga tushmaydi.
 
-`NEXT_PUBLIC_SITE_URL` sitemap, robots.txt, Open Graph va JSON-LD uchun
-ishlatiladi — noto'g'ri bo'lsa qidiruv tizimlari xato manzillarni indekslaydi.
+> ⚠️ **Bu o'zgaruvchilar `npm run build` dan OLDIN o'rnatilgan bo'lishi kerak.**
+> `/api/*` proksisi `next.config.ts` dagi `rewrites()` orqali ishlaydi va
+> uning manzili build paytida `.next/` ichiga yoziladi. Agar noutbukda
+> `BACKEND_URL=http://127.0.0.1:8000` bilan build qilib, natijani serverga
+> yuklasangiz — sayt localhost'ga murojaat qiladi va hech narsa ishlamaydi.
+> **Buildni serverning o'zida qiling** yoki build oldidan env'ni to'g'rilang.
 
-## Build va ishga tushirish
+## cPanel'ga o'rnatish
+
+### 1. Kodni serverga olib chiqish
+
+cPanel → **Git™ Version Control** → Create:
+```
+Clone URL:  https://github.com/Urozboev/gspiuz-front.git
+Repository Path:  /home/<user>/gspiuz-front
+```
+SSH bo'lsa qo'lda ham bo'ladi:
+```bash
+git clone https://github.com/Urozboev/gspiuz-front.git
+```
+
+### 2. Node.js ilovasini yaratish
+
+cPanel → Software → **Setup Node.js App** → Create Application:
+
+| Maydon | Qiymat |
+|---|---|
+| Node.js version | 20 yoki yuqori |
+| Application mode | Production |
+| Application root | `gspiuz-front` |
+| Application URL | `gspi.uz` |
+| Application startup file | `server.js` |
+
+Shu ekranda **Environment variables** bo'limiga yuqoridagi to'rtta
+o'zgaruvchini qo'shing.
+
+### 3. O'rnatish va build
+
+cPanel ekranidagi **"Run NPM Install"** tugmasini bosing, so'ng shu yerdagi
+terminal (yoki SSH) orqali:
 
 ```bash
-npm ci
 npm run build
-npm start          # 3000-portda
 ```
 
-Doimiy ishlashi uchun systemd xizmati:
+Build ~1–2 daqiqa oladi va ~1 GB xotira talab qiladi. Shared hostingda
+xotira yetmasa, buildni mahalliy kompyuterda (yuqoridagi env'lar bilan)
+qilib, `.next/` papkasini serverga yuklang.
 
-```ini
-# /etc/systemd/system/gspi-front.service
-[Unit]
-Description=GSPI frontend (Next.js)
-After=network.target
+### 4. Ishga tushirish
 
-[Service]
-Type=simple
-User=www-data
-WorkingDirectory=/var/www/gspi-front
-Environment=NODE_ENV=production
-Environment=PORT=3000
-ExecStart=/usr/bin/npm start
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-```
-
-```bash
-sudo systemctl enable --now gspi-front
-```
+cPanel ekranida **Restart** tugmasi. `server.js` Passenger bergan portda
+Next.js'ni ko'taradi.
 
 ## Yangilash
 
 ```bash
-git pull            # yoki fayllarni yuklash
+cd ~/gspiuz-front
+git pull
 npm ci
 npm run build
-sudo systemctl restart gspi-front
 ```
+so'ng cPanel'da **Restart**.
 
-Next.js `.next/` papkasini build paytida to'liq qayta yaratadi.
 Build muvaffaqiyatli tugamaguncha eski versiya ishlab turaveradi.
-
-## nginx
-
-Namuna `gspi-backend/deploy/nginx.conf.example` da (backend bilan umumiy,
-chunki bitta server bloki ikkalasiga ham xizmat qiladi).
-
-Muhim nuqtalar:
-- `/upload/` va `/storage/` ni Node orqali o'tkazmang — nginx diskdan bersin, tezroq
-- `client_max_body_size` kamida 20M (admin paneldagi fayl yuklash uchun)
-- Laravel API prefiksini tashqaridan ochmang
 
 ## Xavfsizlik sarlavhalari
 
@@ -104,15 +131,28 @@ Muhim nuqtalar:
 `Referrer-Policy`, `Permissions-Policy`, prodda `Strict-Transport-Security`.
 `poweredByHeader` o'chirilgan.
 
-nginx darajasida takrorlamang — ikki marta qo'yilsa brauzer chalkashadi.
+cPanel `.htaccess` orqali ham sarlavha qo'shsa, **takrorlamang** — ikki marta
+qo'yilgan sarlavha brauzerni chalkashtiradi.
 
 ## Chiqishdan oldin tekshiriladiganlar
 
 - [ ] `npm run build` xatosiz o'tadi
-- [ ] `.env.production.local` da to'rtala o'zgaruvchi to'ldirilgan
-- [ ] Backend `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://gspi.uz`
+- [ ] To'rtala env o'zgaruvchisi cPanel'da kiritilgan
+- [ ] `BACKEND_URL` **`https://`** bilan boshlanadi
+- [ ] `BACKEND_API_PREFIX` backenddagi `API_PREFIX` bilan aynan bir xil
+- [ ] Backend `admin.gspi.uz` da ishlayapti va HTTPS sertifikati bor
+- [ ] Backend nginx'ida API ahost IP'si bilan cheklangan
 - [ ] `https://gspi.uz/sitemap.xml` va `/robots.txt` to'g'ri domenni ko'rsatadi
 - [ ] Admin panelda "Sayt ma'lumotlari" to'ldirilgan: logo, favicon, manzil,
-      telefon, ijtimoiy tarmoqlar, rekvizitlar — bo'sh maydonlar saytda
-      ko'rinmaydi, lekin davlat portali uchun ular majburiy
+      telefon, ijtimoiy tarmoqlar, rekvizitlar
 - [ ] Yandex/Google Search Console ga sayt qo'shilgan
+
+## Tez tekshirish
+
+```bash
+# Proxy ishlayaptimi (JSON qaytishi kerak, HTML emas)
+curl -s https://gspi.uz/api/siteinfo | head -c 200
+
+# Maxfiy prefiks brauzerga chiqmayaptimi (natija bo'sh bo'lishi kerak)
+curl -s https://gspi.uz/ | grep -o "<maxfiy-prefiks>"
+```
