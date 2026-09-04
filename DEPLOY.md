@@ -171,7 +171,19 @@ build ichida muhrlangan, lekin bir xillik uchun ularni ham kiritib qo'ying.
 
 ### 4. Ishga tushirish
 
-**Restart** tugmasi.
+**Restart** tugmasi. Boshqa hech narsa bosmang.
+
+> **`npm start` ni qo'lda ishga tushirmang.** Ilovani Passenger o'zi
+> ko'taradi va portni o'zi beradi. Qo'lda ishga tushirilsa ikkinchi nusxa
+> paydo bo'ladi va port to'qnashuvi chiqadi:
+> ```
+> Error: listen EADDRINUSE: address already in use :::3000
+> ```
+> Bu xato ko'pincha **ilova allaqachon ishlab turganini** bildiradi.
+> cPanel'da **Stop** → **Start** qiling.
+>
+> `package.json` dagi `start` skripti `node server.js` ga o'zgartirilgan —
+> `next start` 3000-portni o'zi band qilardi va Passenger bilan to'qnashardi.
 
 ## Yangilash
 
