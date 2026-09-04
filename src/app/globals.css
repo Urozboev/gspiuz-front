@@ -1,0 +1,479 @@
+@import "tailwindcss";
+
+/*
+ * Dark mode'ni `.dark` klassi orqali boshqarish (AppContext qo'lda almashtiradi).
+ * Tailwind v4 standart holatda media-query ishlatadi — buni o'zgartiramiz.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /*
+   * GSPI brend palitrasi.
+   * Monoxrom ko'k: asosiy rang gerb ko'kining (#020088) yumshatilgan varianti,
+   * urg'u esa shu oilaning ochiqroq tovlanishi. Issiq rang ishlatilmaydi.
+   */
+  --color-brand-50: #eef2fb;
+  --color-brand-100: #dbe3f7;
+  --color-brand-200: #b8c8ef;
+  --color-brand-300: #8ba5e4;
+  --color-brand-400: #5b7cd6;
+  --color-brand-500: #3567d8;
+  --color-brand-600: #2557c4;
+  --color-brand-700: #1b3f9b;
+  --color-brand-800: #142d7f;
+  --color-brand-900: #0f1e6b; /* asosiy — gerb ko'kining yumshatilgan varianti */
+  --color-brand-950: #0a1547;
+
+  /*
+   * Urg'u rangi — asosiy rang bilan bir oilada (ochiqroq ko'k).
+   * Shu sababli issiq-sovuq ziddiyat yuzaga kelmaydi.
+   */
+  --color-accent-300: #9dbaf6;
+  --color-accent-400: #5b92f2;
+  --color-accent-500: #2f6fed;
+  --color-accent-600: #2257c9;
+
+  --color-primary: #0f1e6b;
+  --color-primary-dark: #0a1547;
+  --color-secondary: #1c2539;
+
+  /*
+   * Neytral palitra. Sarlavhalar to'q siyoh rangda, matn yumshoq kulrangda —
+   * samdpi.uz va jdpu.uz dagi kabi, sof qora ishlatilmaydi.
+   */
+  --color-ink-950: #0c1120;
+  --color-ink-900: #1c2539; /* sarlavhalar */
+  --color-ink-800: #2b2b2b;
+  --color-ink-600: #5d666f; /* asosiy matn */
+  --color-ink-400: #959ba3;
+  --color-ink-300: #c2c7cd;
+
+  /* Ochiq kulrang panellar — kartochkalar va bo'limlar foni */
+  --color-mist-50: #fafbfd;
+  --color-mist-100: #f5f7fb;
+  --color-mist-200: #eaeef5;
+
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display), var(--font-sans), sans-serif;
+
+  /* Yozuv o'lchamlari — kattaroq va havodor */
+  --text-xs: 0.875rem; /* 14px */
+  --text-xs--line-height: 1.55;
+  --text-sm: 0.9375rem; /* 15px */
+  --text-sm--line-height: 1.6;
+  --text-base: 1.0625rem; /* 17px */
+  --text-base--line-height: 1.75;
+  --text-lg: 1.1875rem; /* 19px */
+  --text-lg--line-height: 1.7;
+  --text-xl: 1.375rem; /* 22px */
+  --text-xl--line-height: 1.5;
+}
+
+/* Asosiy tipografiya */
+body {
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Sarlavha o'lchamlari.
+ * Etalon saytlarda bo'lim sarlavhalari 48–56px, qalinligi o'rtacha (500–600) —
+ * juda qalin emas, shuning uchun yirik bo'lsa ham bosim qilmaydi.
+ */
+.display-1 {
+  font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.display-2 {
+  font-size: clamp(2rem, 3.8vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+.display-3 {
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/*
+ * Ochiq kulrang panel — kartochkalar uchun asosiy yuza (chegara va soyasiz).
+ * Burchak radiusi bu yerda berilmaydi: uni `rounded-*` utility'si belgilaydi,
+ * aks holda .panel har doim utility'ni bosib ketadi.
+ */
+.panel {
+  background-color: var(--color-mist-100);
+}
+.dark .panel {
+  background-color: rgb(30 41 59 / 0.55);
+}
+
+/* Yumshoq ko'tarilish effekti */
+.lift {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px -18px rgb(15 30 107 / 0.25);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  overflow-x: hidden;
+}
+
+/*
+ * Tailwind v4 preflight tugmalarga `cursor: default` beradi.
+ * Bosiladigan elementlarda kursor "qo'l" ko'rinishida bo'lishi kerak —
+ * bu foydalanuvchi uchun elementning bosiladiganini bildiruvchi asosiy belgi.
+ */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+summary,
+label[for],
+select,
+a[href] {
+  cursor: pointer;
+}
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.dark .glass {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* High contrast (grayscale) mode */
+.grayscale-mode img,
+.grayscale-mode video {
+  filter: grayscale(100%);
+}
+
+/* Marquee animation (top bar ticker) */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 30s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Seamless logo/karta slideri (kontent ikki marta takrorlanadi) */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll var(--marquee-duration, 35s) linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/*
+ * Skroll bo'yicha ochilish effektlari.
+ *
+ * AOS kutubxonasi o'rniga CSS scroll-driven animation ishlatiladi:
+ * JS yuklanmaydi, animatsiya kompozitorda ketadi va qo'llab-quvvatlamaydigan
+ * brauzerlarda kontent hech qanday kechikishsiz oddiy holda ko'rinadi.
+ *
+ * Yo'nalishlar: .reveal (pastdan), .reveal-left, .reveal-right, .reveal-scale.
+ * Ketma-ket ochilish uchun ota-elementga .reveal-stagger qo'yiladi.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal,
+    .reveal-left,
+    .reveal-right,
+    .reveal-scale {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+    .reveal-left {
+      animation-name: reveal-left;
+    }
+    .reveal-right {
+      animation-name: reveal-right;
+    }
+    .reveal-scale {
+      animation-name: reveal-scale;
+    }
+
+    /*
+     * Ketma-ket ochilish: to'r bolalari navbat bilan chiqadi.
+     * animation-range har bir bola uchun biroz kechroq boshlanadi.
+     */
+    .reveal-stagger > * {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 50%;
+    }
+    .reveal-stagger > *:nth-child(2) {
+      animation-range: entry 4% entry 54%;
+    }
+    .reveal-stagger > *:nth-child(3) {
+      animation-range: entry 8% entry 58%;
+    }
+    .reveal-stagger > *:nth-child(4) {
+      animation-range: entry 12% entry 62%;
+    }
+    .reveal-stagger > *:nth-child(n + 5) {
+      animation-range: entry 16% entry 66%;
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes reveal-left {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes reveal-right {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes reveal-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Fade-in-up (sahifa bo'limlari uchun) */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+/*
+ * Backenddan kelgan HTML matnlar uchun (desc maydonlari).
+ * Sodda, o'qishga qulay tipografiya.
+ */
+.article-content {
+  line-height: 1.85;
+  color: rgb(51 65 85); /* slate-700 */
+}
+.dark .article-content {
+  color: rgb(203 213 225); /* slate-300 */
+}
+.article-content p {
+  margin-bottom: 1rem;
+}
+.article-content h1,
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  font-weight: 700;
+  color: rgb(15 23 42);
+  margin: 1.5rem 0 0.75rem;
+  line-height: 1.3;
+}
+.dark .article-content h1,
+.dark .article-content h2,
+.dark .article-content h3,
+.dark .article-content h4 {
+  color: #fff;
+}
+.article-content h2 {
+  font-size: 1.4rem;
+}
+.article-content h3 {
+  font-size: 1.2rem;
+}
+.article-content ul,
+.article-content ol {
+  margin: 0 0 1rem 1.25rem;
+}
+.article-content ul {
+  list-style: disc;
+}
+.article-content ol {
+  list-style: decimal;
+}
+.article-content li {
+  margin-bottom: 0.4rem;
+}
+.article-content a {
+  color: #2f6fed;
+  text-decoration: underline;
+}
+.article-content img {
+  border-radius: 0.75rem;
+  margin: 1rem 0;
+  max-width: 100%;
+  height: auto;
+}
+/*
+ * Muharrirdan kelgan video (CKEditor `<figure class="media">` ichida
+ * iframe qaytaradi). Nisbat saqlanadi va tor ekranda toshib ketmaydi.
+ */
+.article-content iframe,
+.article-content video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  display: block;
+}
+.article-content figure {
+  margin: 1.5rem 0;
+  max-width: 100%;
+}
+.article-content figure img {
+  margin: 0;
+}
+.article-content figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: rgb(93 102 111);
+}
+
+/*
+ * Keng jadval sahifani gorizontal siljitmasligi kerak — o'z ichida
+ * sursin. Muharrir jadvalni `<figure class="table">` ichiga o'raydi.
+ */
+.article-content figure.table,
+.article-content .table-wrapper {
+  overflow-x: auto;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.875rem;
+}
+.article-content th,
+.article-content td {
+  border: 1px solid rgb(226 232 240);
+  padding: 0.6rem 0.8rem;
+  text-align: left;
+}
+.dark .article-content th,
+.dark .article-content td {
+  border-color: rgb(51 65 85);
+}
+/*
+ * To'q ko'k fondagi HTML matn (masalan rektor tabrigi).
+ * `.article-content` ning standart to'q ranglari o'qib bo'lmaydigan bo'lib qoladi.
+ */
+.article-content.on-dark {
+  color: rgb(219 227 247 / 0.8); /* brand-100/80 */
+}
+.article-content.on-dark h1,
+.article-content.on-dark h2,
+.article-content.on-dark h3,
+.article-content.on-dark h4 {
+  color: #fff;
+}
+.article-content.on-dark a {
+  color: #9dbaf6; /* accent-300 */
+}
+.article-content.on-dark blockquote {
+  border-left-color: #2f6fed;
+  color: rgb(219 227 247 / 0.65);
+}
+.article-content.on-dark th,
+.article-content.on-dark td {
+  border-color: rgb(255 255 255 / 0.15);
+}
+
+.article-content blockquote {
+  border-left: 3px solid #0f1e6b;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: rgb(100 116 139);
+  font-style: italic;
+}

@@ -1,0 +1,13 @@
+# Barcha matn fayllarida repoda LF saqlanadi — Windows va Linux o'rtasida
+# butun fayl "o'zgargan" bo'lib ko'rinmasligi uchun.
+* text=auto eol=lf
+
+# Ikkilik fayllar o'zgartirilmasin.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
