@@ -60,11 +60,18 @@ NEXT_PUBLIC_SITE_URL=https://gspi.uz
 server tomonda o'qiladi va brauzer bundle'iga tushmaydi.
 
 > ⚠️ **Bu o'zgaruvchilar `npm run build` dan OLDIN o'rnatilgan bo'lishi kerak.**
+>
+> Bu amalda tekshirilgan: build `127.0.0.1:8000` bilan qilinib, server boshqa
+> manzil bilan ishga tushirilganda **build'dagi qiymat ishlatildi**, ishga
+> tushirishdagisi e'tiborsiz qoldi.
 > `/api/*` proksisi `next.config.ts` dagi `rewrites()` orqali ishlaydi va
 > uning manzili build paytida `.next/` ichiga yoziladi. Agar noutbukda
 > `BACKEND_URL=http://127.0.0.1:8000` bilan build qilib, natijani serverga
 > yuklasangiz — sayt localhost'ga murojaat qiladi va hech narsa ishlamaydi.
 > **Buildni serverning o'zida qiling** yoki build oldidan env'ni to'g'rilang.
+>
+> Himoya sifatida: prod rejimida `BACKEND_URL` localhost'ga qaragan bo'lsa,
+> build paytida ekranda ogohlantirish chiqadi. Uni ko'rsangiz — to'xtang.
 
 ## cPanel'ga o'rnatish
 

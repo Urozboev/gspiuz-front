@@ -10,6 +10,30 @@ const backendApiPrefix = (process.env.BACKEND_API_PREFIX ?? "api").replace(
   ""
 );
 
+/*
+ * `rewrites()` manzili build paytida `.next/routes-manifest.json` ga
+ * yoziladi va serverni ishga tushirishdagi `BACKEND_URL` uni almashtirmaydi
+ * (tekshirilgan). Ya'ni dev qiymatlari bilan qurilgan build serverga
+ * yuklansa, sayt localhost'ga murojaat qiladi va sabab hech qayerda
+ * ko'rinmaydi. Shuning uchun build paytida ogohlantiramiz.
+ */
+if (
+  process.env.NODE_ENV === "production" &&
+  /(localhost|127\.0\.0\.1)/.test(backendUrl)
+) {
+  console.warn(
+    [
+      "",
+      "  ⚠  BACKEND_URL = " + backendUrl,
+      "",
+      "  Bu manzil build ichiga yoziladi va keyin o'zgartirib bo'lmaydi.",
+      "  Agar bu build serverga yuklanadigan bo'lsa, sayt ishlamaydi.",
+      "  Prod uchun: BACKEND_URL=https://admin.gspi.uz",
+      "",
+    ].join("\n"),
+  );
+}
+
 const backendHost = (() => {
   try {
     return new URL(backendUrl).hostname;
