@@ -32,6 +32,43 @@ hech qachon chiqmaydi** va CORS sozlash kerak emas.
 > tomonida API ahost IP'si bilan cheklanishi kerak
 > (`gspi-backend/DEPLOY.md` ga qarang).
 
+## Chiqarish tartibi
+
+Qadamlar **shu ketma-ketlikda** bajarilishi kerak:
+
+| # | Qadam | Kim bajaradi |
+|---|---|---|
+| 1 | Backendni institut serveriga chiqarish | backend |
+| 2 | Kerio Control'da 80/443 portlarini o'tkazish | **tarmoq admini** |
+| 3 | `admin.gspi.uz` uchun Let's Encrypt sertifikati | backend |
+| 4 | **API tashqaridan tekshiriladi — o'tish nuqtasi** | ikkalasi |
+| 5 | Frontend build va ahost'ga yuklash | frontend |
+| 6 | Ahost IP → backend nginx `allow` ro'yxatiga | backend |
+
+> ⚠️ **4-qadamgacha frontendni build qilmang.** `BACKEND_URL` build ichiga
+> muhrlanadi; `https://admin.gspi.uz` javob bermayotgan bo'lsa, muhrlangan
+> manzil ham ishlamaydi va hammasini qaytadan qilish kerak bo'ladi.
+
+**2-qadam nima uchun kerak.** `admin.gspi.uz` DNS'i to'g'ri
+(`198.163.204.233`), lekin o'sha manzilda **Kerio Control xavfsizlik devori**
+turibdi va 80/443 ni ichkariga o'tkazmaydi:
+```
+$ curl -sI http://admin.gspi.uz/
+HTTP/1.0 403 Forbidden
+… Kerio Control Proxy
+```
+443-portdagi sertifikat ham Kerio'niki — o'zi imzolagan va **2026-yil martda
+muddati tugagan**. SSH (52200) o'tkaziladi, ya'ni server ichkarida ishlayapti.
+
+80-port **majburiy** — usiz Let's Encrypt domenni tasdiqlay olmaydi.
+
+Tekshirish (istalgan kompyuterdan):
+```bash
+curl -sI http://admin.gspi.uz/ | head -1
+```
+`Kerio` yoki `403` o'rniga nginx javobi (`200`, `301`, `404`) kelsa —
+o'tkazish ishlayapti.
+
 ## Talablar
 
 - **Node.js 20 yoki undan yuqori** — cPanel → Software → *Setup Node.js App*
