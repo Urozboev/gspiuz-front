@@ -98,7 +98,35 @@ const nextConfig: NextConfig = {
   // Brauzerdan kelgan /api/* so'rovlarini Laravel backendga uzatamiz.
   // Bu CORS muammosini butunlay yo'q qiladi (dev va prod uchun).
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+
+      /*
+       * Sahifa HTML'i uchun keshni cheklash.
+       *
+       * Next statik sahifalarga `s-maxage=31536000` (bir yil) qo'yadi.
+       * Hosting oldidagi nginx buni bajarib, HTML'ni saqlab qoladi va
+       * yangi build chiqarilgandan keyin ham eski sahifani ko'rsataveradi.
+       * Bu amalda kuzatildi: `?nocache=1` bilan yangi sahifa kelardi,
+       * oddiy manzil esa eskisini qaytarardi.
+       *
+       * Sahifalar baribir ma'lumotni brauzerda yuklaydi, ya'ni HTML'ni
+       * uzoq keshlashdan foyda yo'q. `must-revalidate` bilan proksi
+       * har safar tekshirib oladi (o'zgarmagan bo'lsa 304, arzon).
+       *
+       * `_next/static` va `_next/image` chetlab o'tiladi — ular
+       * nomida xesh bor va abadiy keshlanishi kerak.
+       */
+      {
+        source: "/:path((?!_next/static|_next/image).*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+        ],
+      },
+    ];
   },
 
   async rewrites() {
