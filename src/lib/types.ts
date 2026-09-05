@@ -74,6 +74,8 @@ export interface SiteInfo {
   admission_url?: string | null;
   address: string | null;
   phone_number: string | null;
+  /** Call markaz raqami. Bo'sh bo'lsa `phone_number` ishlatiladi. */
+  call_center?: string | null;
   email: string | null;
   work_time: string | null;
   map: string | null;

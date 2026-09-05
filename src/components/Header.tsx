@@ -180,6 +180,8 @@ export default function Header() {
 
   // Zaxira raqam config'dan olinadi — footer bilan bir manba bo'lsin.
   const phone = siteInfo?.phone_number || INSTITUTE.phone;
+  // Call markaz alohida bo'lishi mumkin; kiritilmagan bo'lsa asosiy raqam.
+  const callCenter = siteInfo?.call_center?.trim() || phone;
 
   // Ijtimoiy tarmoqlar — faqat manzili kiritilganlari ko'rsatiladi.
   const socials = [
@@ -201,7 +203,7 @@ export default function Header() {
           {/* Chap: yuguruvchi qator */}
           <div className="flex-1 overflow-hidden relative h-5 flex items-center md:max-w-md">
             <div className="animate-marquee whitespace-nowrap text-accent-300 text-sm font-medium select-none">
-              {siteInfo?.tagline || t.tagline} · {t.callCenter}: {phone} ·{" "}
+              {siteInfo?.tagline || t.tagline} · {t.callCenter}: {callCenter} ·{" "}
               {siteInfo?.slogan || t.since}
             </div>
           </div>
