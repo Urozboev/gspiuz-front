@@ -18,6 +18,12 @@
 #
 set -euo pipefail
 
+# Git Bash (MSYS) "/api" kabi qiymatlarni Windows yo'liga aylantirib yuboradi
+# ("C:/Program Files/Git/api"). Bu qiymat build ichiga muhrlanib, brauzer
+# API o'rniga mahalliy faylga murojaat qilardi. Konvertatsiyani o'chiramiz.
+export MSYS_NO_PATHCONV=1
+export MSYS2_ARG_CONV_EXCL="*"
+
 if [ -z "${BACKEND_URL:-}" ]; then
   echo "XATO: BACKEND_URL ko'rsatilmagan." >&2
   echo "Bu manzil build ichiga muhrlanadi — keyin o'zgartirib bo'lmaydi." >&2
@@ -31,6 +37,24 @@ case "$BACKEND_URL" in
     exit 1
     ;;
 esac
+
+# Yo'l konvertatsiyasi baribir sodir bo'lsa, buni build'dan OLDIN ushlaymiz.
+for v in NEXT_PUBLIC_API_URL BACKEND_URL; do
+  val="${!v:-}"
+  case "$val" in
+    *:/*|*"Program Files"*|*"Git/api"*)
+      case "$val" in
+        https://*|http://*) ;;
+        *)
+          echo "XATO: $v buzilgan — '$val'" >&2
+          echo "Git Bash yo'lni o'zgartirib yuborgan. MSYS_NO_PATHCONV=1 qo'ying," >&2
+          echo "yoki $v ni umuman bermang (standart qiymat ishlatiladi)." >&2
+          exit 1
+          ;;
+      esac
+      ;;
+  esac
+done
 
 FULL="${FULL:-0}"
 
@@ -54,8 +78,9 @@ else
 
   echo "▸ Arxivlash"
   rm -f gspi-front-next.tar.gz
-  # `cache` — faqat qayta qurish uchun, serverda kerak emas (200 MB).
-  tar -czf gspi-front-next.tar.gz --exclude=".next/cache" .next
+  # `cache` va `dev` — faqat qayta qurish/dev uchun, serverda kerak emas
+  # va o'nlab megabayt joy egallaydi.
+  tar -czf gspi-front-next.tar.gz --exclude=".next/cache" --exclude=".next/dev" .next
   ARCHIVE=gspi-front-next.tar.gz
   JOY="~/gspiuz-front/ (mavjud .next ustiga)"
 fi
