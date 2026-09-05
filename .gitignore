@@ -47,3 +47,5 @@ next-env.d.ts
 
 # deploy.sh yaratadigan arxiv
 /gspi-front-deploy.tar.gz
+/gspi-front-next.tar.gz
+/gspi-front-full.tar.gz
