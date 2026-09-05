@@ -325,8 +325,22 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* 2. TEZKOR HAVOLALAR — hero ustiga chiqib turadi */}
-      <Container className="relative z-20 -mt-24">
+      {/*
+        2. TEZKOR HAVOLALAR — hero ustiga chiqib turadi.
+
+        Bo'lim tepasida to'ldirish yo'q: uning foni aynan hero tugagan
+        joydan boshlanadi, kartochka esa manfiy margin bilan hero ustiga
+        ko'tariladi. Shu tarzda hero bilan keyingi bo'lim orasida fon
+        berilmagan bo'shliq qolmaydi — aks holda u yerda oq va kulrang
+        yonma-yon tushib, xatodek ko'rinardi.
+      */}
+      {/*
+        `flow-root` — bo'limning yuqori chegarasi ichkaridagi manfiy
+        margin bilan tepaga tortilmasin. Usiz bo'lim hero ustiga chiqib,
+        uning pastki 96px ini yopib qo'yardi.
+      */}
+      <section className="flow-root bg-white dark:bg-slate-900 transition-colors">
+        <Container className="relative z-20 -mt-24">
         <div className="bg-white dark:bg-slate-900 rounded-xl shadow-[0_24px_70px_-30px_rgb(15_30_107_/_0.3)] p-4 sm:p-6">
           <p className="px-3 pb-4 text-xs font-semibold uppercase tracking-[0.18em] text-ink-400">
             {p.home.quickLinks}
@@ -362,7 +376,8 @@ export default function Home() {
             })}
           </div>
         </div>
-      </Container>
+        </Container>
+      </section>
 
       {/* Qabul hisoblagichi — sana kiritilmagan bo'lsa ko'rinmaydi */}
       <AdmissionCountdown />
