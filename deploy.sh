@@ -26,7 +26,8 @@ case "$BACKEND_URL" in
 esac
 
 echo "▸ Build (BACKEND_URL=$BACKEND_URL)"
-NODE_ENV=production npm run build
+# Arxiv yo'li uchun faqat kerakli modullar ko'chirilsin.
+BUILD_STANDALONE=1 NODE_ENV=production npm run build
 
 echo "▸ Statik fayllarni standalone ichiga ko'chirish"
 # Next bularni standalone ichiga o'zi ko'chirmaydi — hujjatlashtirilgan xatti-harakat.

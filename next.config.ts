@@ -69,12 +69,15 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   /*
-   * Shared hostingda `npm install` 442 MB va 25 000 fayl talab qiladi —
-   * ko'p tarifda kvota shunga yetmaydi. `standalone` build faqat haqiqatan
-   * kerak bo'lgan modullarni ko'chiradi, ya'ni serverda `npm install`
-   * umuman kerak emas.
+   * Odatda serverda `git pull` + `npm run build` qilinadi — bunda oddiy
+   * build kerak va ishga tushirish fayli ildizdagi `server.js`.
+   *
+   * Serverda kvota yetmaganda esa build mahalliy qilinadi va faqat kerakli
+   * modullar ko'chiriladi: `BUILD_STANDALONE=1` (deploy.sh shuni qo'yadi).
    */
-  output: "standalone",
+  ...(process.env.BUILD_STANDALONE === "1"
+    ? { output: "standalone" as const }
+    : {}),
 
   // Server versiyasini oshkor qilmaymiz.
   poweredByHeader: false,
