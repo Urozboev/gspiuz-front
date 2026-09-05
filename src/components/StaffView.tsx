@@ -11,7 +11,7 @@ import type { Department, DepartmentStaff } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice } from "@/components/ui/InfoBlocks";
 import EmployeeCard from "@/components/cards/EmployeeCard";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, StaffGridSkeleton } from "@/components/ui/States";
 
 interface StaffViewProps {
   slug: string;
@@ -59,7 +59,7 @@ export default function StaffView({
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <StaffGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !hasStaff ? (

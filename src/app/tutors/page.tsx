@@ -9,7 +9,7 @@ import type { StaffMember } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
 import EmployeeCard from "@/components/cards/EmployeeCard";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, StaffGridSkeleton } from "@/components/ui/States";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 
 /** Tyutorlar — backendning /tutors endpointidan (tyutor lavozimi bo'yicha filtrlangan). */
@@ -37,7 +37,7 @@ export default function TutorsPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <StaffGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || tutors.length === 0 ? (

@@ -9,7 +9,7 @@ import type { Journal } from "@/lib/types";
 import { pickImage, formatDate } from "@/lib/format";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, DetailSkeleton } from "@/components/ui/States";
 
 export default function JournalDetail({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
@@ -25,7 +25,7 @@ export default function JournalDetail({ params }: { params: Promise<{ slug: stri
         </Link>
 
         {loading ? (
-          <Spinner />
+          <DetailSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !j ? (

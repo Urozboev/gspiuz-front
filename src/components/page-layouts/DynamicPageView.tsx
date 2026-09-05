@@ -11,7 +11,7 @@ import RemoteImage from "@/components/ui/RemoteImage";
 import type { DynamicPage, ImageSet } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice } from "@/components/ui/InfoBlocks";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, ArticleSkeleton } from "@/components/ui/States";
 import PageCardGrid from "./PageCardGrid";
 import PageFileList from "./PageFileList";
 
@@ -79,7 +79,7 @@ export default function DynamicPageView({
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <ArticleSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || isEmpty ? (

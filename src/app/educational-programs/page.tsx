@@ -9,7 +9,7 @@ import { useApi } from "@/hooks/useApi";
 import type { EducationalProgram } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/InfoBlocks";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, CardGridSkeleton } from "@/components/ui/States";
 
 /**
  * Ta'lim yo'nalishlari.
@@ -43,7 +43,7 @@ function ProgramsContent() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || groups.length === 0 ? (
@@ -119,7 +119,7 @@ function ProgramsContent() {
  */
 export default function ProgramsPage() {
   return (
-    <Suspense fallback={<Spinner />}>
+    <Suspense fallback={<CardGridSkeleton />}>
       <ProgramsContent />
     </Suspense>
   );

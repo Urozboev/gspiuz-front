@@ -10,7 +10,7 @@ import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
 import NewsCard from "@/components/cards/NewsCard";
 import Pagination from "@/components/ui/Pagination";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, CardGridSkeleton } from "@/components/ui/States";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 
 /**
@@ -46,7 +46,7 @@ export default function AnnouncementsPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || items.length === 0 ? (

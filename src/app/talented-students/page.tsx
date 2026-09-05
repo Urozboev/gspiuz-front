@@ -9,7 +9,7 @@ import type { Paginated, Student } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, StaffGridSkeleton } from "@/components/ui/States";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 
 /** Iqtidorli talabalar — tanlov va olimpiada g'oliblari. */
@@ -38,7 +38,7 @@ export default function TalentedStudentsPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <StaffGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || students.length === 0 ? (

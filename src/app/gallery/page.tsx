@@ -12,7 +12,7 @@ import type { Paginated, GalleryAlbum, GalleryPhoto } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner } from "@/components/ui/States";
+import { CardGridSkeleton } from "@/components/ui/States";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 
 /**
@@ -53,7 +53,7 @@ export default function GalleryPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : isEmpty ? (
           <PendingNotice text={sp.pending} />
         ) : (

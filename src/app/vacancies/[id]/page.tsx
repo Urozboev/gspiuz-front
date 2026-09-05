@@ -8,7 +8,7 @@ import { useApi } from "@/hooks/useApi";
 import type { Vacancy } from "@/lib/types";
 import { formatDate } from "@/lib/format";
 import Container from "@/components/ui/Container";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, ArticleSkeleton } from "@/components/ui/States";
 
 export default function VacancyDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -33,7 +33,7 @@ export default function VacancyDetail({ params }: { params: Promise<{ id: string
         </Link>
 
         {loading ? (
-          <Spinner />
+          <ArticleSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !v ? (

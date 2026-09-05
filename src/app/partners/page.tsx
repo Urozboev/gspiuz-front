@@ -9,7 +9,7 @@ import PageHero from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/InfoBlocks";
 import RemoteImage from "@/components/ui/RemoteImage";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, CardGridSkeleton } from "@/components/ui/States";
 
 export default function PartnersPage() {
   const { p } = useT();
@@ -29,7 +29,7 @@ export default function PartnersPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || partners.length === 0 ? (

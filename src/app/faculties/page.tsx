@@ -25,7 +25,7 @@ import type { Department } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import Container from "@/components/ui/Container";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, CardGridSkeleton } from "@/components/ui/States";
 
 /*
  * Fakultet kartochkalari uchun ikonkalar.
@@ -57,7 +57,7 @@ export default function FacultiesPage() {
 
       <Container className="py-20 lg:py-28">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || items.length === 0 ? (

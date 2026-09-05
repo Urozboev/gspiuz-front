@@ -11,7 +11,7 @@ import Container from "@/components/ui/Container";
 import { Section, PendingNotice } from "@/components/ui/InfoBlocks";
 import { useApp } from "@/context/AppContext";
 import { sectionPages } from "@/locales/sections";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, ListSkeleton } from "@/components/ui/States";
 
 export default function FaqPage() {
   const { p } = useT();
@@ -33,7 +33,7 @@ export default function FaqPage() {
 
       <Container className="py-20 lg:py-28 max-w-4xl">
         {loading ? (
-          <Spinner />
+          <ListSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || items.length === 0 ? (

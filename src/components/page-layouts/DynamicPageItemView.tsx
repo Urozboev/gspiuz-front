@@ -18,7 +18,7 @@ import PageHero from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/InfoBlocks";
 import RemoteImage from "@/components/ui/RemoteImage";
 import PageFileList from "./PageFileList";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, DetailSkeleton } from "@/components/ui/States";
 
 /** `layout: "cards"` sahifasidagi bitta element — alohida sahifa. */
 export default function DynamicPageItemView({
@@ -67,7 +67,7 @@ export default function DynamicPageItemView({
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <DetailSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !item ? (

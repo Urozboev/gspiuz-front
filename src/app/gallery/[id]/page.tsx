@@ -13,7 +13,7 @@ import type { GalleryAlbum } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/InfoBlocks";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, CardGridSkeleton } from "@/components/ui/States";
 
 /** Bitta fotoalbom — barcha rasmlari bilan. */
 export default function GalleryAlbumPage({
@@ -43,7 +43,7 @@ export default function GalleryAlbumPage({
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !album ? (

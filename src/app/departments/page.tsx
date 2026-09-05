@@ -8,7 +8,7 @@ import type { StaffMember } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
 import EmployeeCard from "@/components/cards/EmployeeCard";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, StaffGridSkeleton } from "@/components/ui/States";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 
 /** Boshqarma va bo'limlar — mas'ul xodimlar ro'yxati bilan. */
@@ -36,7 +36,7 @@ export default function DepartmentsPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <StaffGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || staff.length === 0 ? (

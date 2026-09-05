@@ -19,7 +19,7 @@ import type { EducationalProgram } from "@/lib/types";
 import { pickImage, youtubeId, stripHtml } from "@/lib/format";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, DetailSkeleton } from "@/components/ui/States";
 
 interface ProgramDetail extends EducationalProgram {
   first_descriptionv?: string | null;
@@ -70,7 +70,7 @@ export default function ProgramDetail({ params }: { params: Promise<{ id: string
         </Link>
 
         {loading ? (
-          <Spinner />
+          <DetailSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !prog ? (

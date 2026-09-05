@@ -7,7 +7,7 @@ import type { LeadershipGroup, Employee } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/InfoBlocks";
 import EmployeeCard from "@/components/cards/EmployeeCard";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, StaffGridSkeleton } from "@/components/ui/States";
 
 export default function LeadershipPage() {
   const { p } = useT();
@@ -27,7 +27,7 @@ export default function LeadershipPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <StaffGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || groups.length === 0 ? (

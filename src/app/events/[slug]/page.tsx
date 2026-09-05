@@ -19,7 +19,7 @@ import { events as dict } from "@/locales/sections";
 import type { CalendarEvent, Paginated } from "@/lib/types";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, DetailSkeleton } from "@/components/ui/States";
 import { EventRow } from "@/components/EventsCalendar";
 
 /** Bitta tadbir sahifasi. */
@@ -79,7 +79,7 @@ export default function EventDetail({
         </Link>
 
         {loading ? (
-          <Spinner />
+          <DetailSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !event ? (

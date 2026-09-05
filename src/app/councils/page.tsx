@@ -7,7 +7,7 @@ import { sectionPages } from "@/locales/sections";
 import type { Paginated, DocumentItem } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, DocumentList, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
-import { Spinner } from "@/components/ui/States";
+import { ListSkeleton } from "@/components/ui/States";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 
 /** Kengashlar — tarkib va qarorlar hujjatlar ro'yxati orqali beriladi. */
@@ -34,7 +34,7 @@ export default function CouncilsPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <ListSkeleton />
         ) : notFound || docs.length === 0 ? (
           <PendingNotice text={dict.pending} />
         ) : (

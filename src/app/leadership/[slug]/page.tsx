@@ -9,7 +9,7 @@ import { fullName, localized, normalizeMediaUrl, stripHtml } from "@/lib/format"
 import { useApp } from "@/context/AppContext";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, DetailSkeleton } from "@/components/ui/States";
 
 interface EmployeeDetail {
   id: number;
@@ -74,7 +74,7 @@ export default function LeadershipDetail({ params }: { params: Promise<{ slug: s
         </Link>
 
         {loading ? (
-          <Spinner />
+          <DetailSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || !emp ? (

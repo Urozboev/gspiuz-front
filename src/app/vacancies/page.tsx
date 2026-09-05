@@ -10,7 +10,7 @@ import { formatDate, truncate } from "@/lib/format";
 import PageHero from "@/components/ui/PageHero";
 import { Section } from "@/components/ui/InfoBlocks";
 import Pagination from "@/components/ui/Pagination";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, ListSkeleton } from "@/components/ui/States";
 
 export default function VacanciesPage() {
   const { p, lang } = useT();
@@ -32,7 +32,7 @@ export default function VacanciesPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <ListSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || items.length === 0 ? (

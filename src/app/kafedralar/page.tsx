@@ -9,7 +9,7 @@ import { localized } from "@/lib/format";
 import type { Department } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import Container from "@/components/ui/Container";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, CardGridSkeleton } from "@/components/ui/States";
 
 export default function ChairsPage() {
   const { p } = useT();
@@ -28,7 +28,7 @@ export default function ChairsPage() {
 
       <Container className="py-20 lg:py-28">
         {loading ? (
-          <Spinner />
+          <CardGridSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || items.length === 0 ? (

@@ -1,24 +1,111 @@
 import React from "react";
-import { Loader2, Inbox, AlertTriangle } from "lucide-react";
+import { Inbox, AlertTriangle } from "lucide-react";
 
-/** Yuklanish spinneri (markazlashtirilgan). */
-export function Spinner({ className = "" }: { className?: string }) {
+/**
+ * Skeletning bitta bo'lagi.
+ *
+ * Skeletlar haqiqiy kontent shakliga o'xshashi kerak — aks holda kontent
+ * kelganda sahifa "sakraydi" va bu spinnerdan ham bezovta qiladi.
+ */
+export function Bar({ className = "" }: { className?: string }) {
+  return <div className={`rounded bg-mist-200 dark:bg-slate-800 ${className}`} />;
+}
+
+/** Karta shaklidagi skelet — yangilik va shunga o'xshash kartochkalar uchun. */
+export function CardSkeleton() {
   return (
-    <div className={`flex items-center justify-center py-20 ${className}`}>
-      <Loader2 className="w-8 h-8 text-accent-500 animate-spin" />
+    <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden animate-pulse">
+      <div className="h-52 bg-mist-200 dark:bg-slate-800" />
+      <div className="p-7 space-y-4">
+        <Bar className="h-3 w-24" />
+        <Bar className="h-5 w-full" />
+        <Bar className="h-5 w-3/4" />
+        <Bar className="h-4 w-1/3 mt-2" />
+      </div>
     </div>
   );
 }
 
-/** Karta shaklidagi skelet (yuklanish paytida). */
-export function CardSkeleton() {
+/** Xodim kartochkasi skeleti — portret + ism + lavozim. */
+export function StaffCardSkeleton() {
   return (
-    <div className="bg-white dark:bg-slate-900 border border-mist-200 dark:border-slate-800 rounded-lg overflow-hidden animate-pulse">
-      <div className="h-48 bg-slate-200 dark:bg-slate-800" />
+    <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden animate-pulse">
+      <div className="h-64 bg-mist-200 dark:bg-slate-800" />
       <div className="p-6 space-y-3">
-        <div className="h-3 w-20 bg-slate-200 dark:bg-slate-800 rounded" />
-        <div className="h-4 w-full bg-slate-200 dark:bg-slate-800 rounded" />
-        <div className="h-4 w-2/3 bg-slate-200 dark:bg-slate-800 rounded" />
+        <Bar className="h-3 w-28" />
+        <Bar className="h-5 w-4/5" />
+        <Bar className="h-4 w-1/2" />
+      </div>
+    </div>
+  );
+}
+
+/** Xodimlar to'ri skeleti. */
+export function StaffGridSkeleton({ count = 6 }: { count?: number }) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {Array.from({ length: count }).map((_, i) => (
+        <StaffCardSkeleton key={i} />
+      ))}
+    </div>
+  );
+}
+
+/** Ro'yxat qatorlari skeleti — hujjatlar, fayllar, havolalar uchun. */
+export function ListSkeleton({ count = 5 }: { count?: number }) {
+  return (
+    <div className="flex flex-col gap-3">
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="bg-white dark:bg-slate-900 rounded-xl p-6 flex items-center gap-5 animate-pulse"
+        >
+          <Bar className="h-12 w-12 shrink-0 rounded-lg" />
+          <div className="flex-grow space-y-2.5">
+            <Bar className="h-5 w-2/3" />
+            <Bar className="h-3.5 w-1/4" />
+          </div>
+          <Bar className="hidden sm:block h-4 w-24 shrink-0" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Matnli sahifa skeleti — sarlavha va bir nechta paragraf.
+ * Qatorlar uzunligi har xil, chunki haqiqiy matn ham shunday.
+ */
+export function ArticleSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-xl p-8 sm:p-12 animate-pulse">
+      <Bar className="h-8 w-2/3" />
+      <div className="mt-8 space-y-3.5 max-w-3xl">
+        <Bar className="h-4 w-full" />
+        <Bar className="h-4 w-11/12" />
+        <Bar className="h-4 w-full" />
+        <Bar className="h-4 w-4/5" />
+        <Bar className="h-4 w-full" />
+        <Bar className="h-4 w-2/3" />
+      </div>
+    </div>
+  );
+}
+
+/** Detal sahifasi skeleti — muqova rasmi, sarlavha, matn. */
+export function DetailSkeleton() {
+  return (
+    <div className="bg-white dark:bg-slate-900 rounded-xl overflow-hidden animate-pulse">
+      <div className="h-72 sm:h-96 bg-mist-200 dark:bg-slate-800" />
+      <div className="p-8 sm:p-12">
+        <Bar className="h-3.5 w-32" />
+        <Bar className="mt-5 h-9 w-3/4" />
+        <div className="mt-9 space-y-3.5 max-w-3xl">
+          <Bar className="h-4 w-full" />
+          <Bar className="h-4 w-11/12" />
+          <Bar className="h-4 w-full" />
+          <Bar className="h-4 w-3/5" />
+        </div>
       </div>
     </div>
   );

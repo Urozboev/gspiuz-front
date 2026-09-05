@@ -11,7 +11,7 @@ import { PageBody } from "@/components/ui/InfoBlocks";
 import { usePageBlocks } from "@/hooks/usePageBlocks";
 import Container from "@/components/ui/Container";
 import Pagination from "@/components/ui/Pagination";
-import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
+import { EmptyState, ErrorState, ListSkeleton } from "@/components/ui/States";
 
 export default function DocumentsPage() {
   const { p, lang } = useT();
@@ -86,7 +86,7 @@ export default function DocumentsPage() {
         )}
 
         {loading ? (
-          <Spinner />
+          <ListSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || docs.length === 0 ? (

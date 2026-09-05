@@ -11,7 +11,7 @@ import type { CalendarEvent, Paginated } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice } from "@/components/ui/InfoBlocks";
 import EventsCalendar, { EventRow } from "@/components/EventsCalendar";
-import { Spinner, ErrorState } from "@/components/ui/States";
+import { ErrorState, ListSkeleton } from "@/components/ui/States";
 
 /** Tadbirlar kalendari — oylik to'r va yaqin tadbirlar ro'yxati. */
 export default function EventsPage() {
@@ -42,7 +42,7 @@ export default function EventsPage() {
 
       <Section tone="mist">
         {loading ? (
-          <Spinner />
+          <ListSkeleton />
         ) : error ? (
           <ErrorState onRetry={refetch} />
         ) : notFound || items.length === 0 ? (
