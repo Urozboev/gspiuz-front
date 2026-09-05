@@ -35,7 +35,8 @@ cp -r public .next/standalone/public
 
 echo "▸ Arxivlash"
 rm -f gspi-front-deploy.tar.gz
-tar -czf gspi-front-deploy.tar.gz -C .next/standalone .
+# Yo'l boshidagi "./" siz — ba'zi ochuvchilar uni noto'g'ri talqin qiladi.
+tar -czf gspi-front-deploy.tar.gz -C .next/standalone   $(cd .next/standalone && ls -A)
 
 SIZE=$(du -h gspi-front-deploy.tar.gz | cut -f1)
 echo
@@ -43,5 +44,6 @@ echo "Tayyor: gspi-front-deploy.tar.gz ($SIZE)"
 echo
 echo "Keyingi qadamlar:"
 echo "  1. Arxivni cPanel File Manager orqali ~/gspiuz-front/ ga yuklang"
-echo "  2. O'sha yerda oching (Extract)"
-echo "  3. Setup Node.js App → Restart"
+echo "  2. O'SHA PAPKA ICHIDA turib Extract qiling (ichki papka yaratilmasin)"
+echo "  3. server.js ~/gspiuz-front/server.js yo'lida ekanini tekshiring"
+echo "  4. Setup Node.js App → Restart"

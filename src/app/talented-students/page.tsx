@@ -4,7 +4,7 @@ import { Trophy } from "lucide-react";
 import { useApi } from "@/hooks/useApi";
 import { useApp } from "@/context/AppContext";
 import { sectionPages } from "@/locales/sections";
-import { pickImage } from "@/lib/format";
+import { pickImage, stripHtml } from "@/lib/format";
 import type { Paginated, Student } from "@/lib/types";
 import PageHero from "@/components/ui/PageHero";
 import { Section, PendingNotice, PageBody } from "@/components/ui/InfoBlocks";
@@ -63,7 +63,7 @@ export default function TalentedStudentsPage() {
                   </h3>
                   {student.dec && (
                     <p className="mt-3 text-base text-ink-600 dark:text-slate-400 line-clamp-3">
-                      {student.dec}
+                      {stripHtml(student.dec)}
                     </p>
                   )}
                 </div>

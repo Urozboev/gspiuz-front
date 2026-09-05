@@ -5,7 +5,7 @@ import { Cake, ChevronDown } from "lucide-react";
 import { useApi } from "@/hooks/useApi";
 import { useApp, type Language } from "@/context/AppContext";
 import { endpoints } from "@/lib/endpoints";
-import { normalizeMediaUrl } from "@/lib/format";
+import { normalizeMediaUrl, stripHtml } from "@/lib/format";
 import type { BirthdayPerson } from "@/lib/types";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
@@ -142,7 +142,7 @@ export default function BirthdayGreeting() {
                     </p>
                     <p className="mt-0.5 text-sm text-brand-200/70 truncate">
                       {[
-                        person.position,
+                        stripHtml(person.position),
                         person.age ? text.age(person.age) : null,
                       ]
                         .filter(Boolean)

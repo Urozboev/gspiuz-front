@@ -16,7 +16,7 @@ import { useApp } from "@/context/AppContext";
 import { admissions } from "@/locales/sections";
 import { useApi } from "@/hooks/useApi";
 import type { EducationalProgram } from "@/lib/types";
-import { pickImage, youtubeId } from "@/lib/format";
+import { pickImage, youtubeId, stripHtml } from "@/lib/format";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
 import { Spinner, EmptyState, ErrorState } from "@/components/ui/States";
@@ -159,7 +159,11 @@ export default function ProgramDetail({ params }: { params: Promise<{ id: string
                         </div>
                         <div className="min-w-0">
                           <p className="font-semibold text-sm text-ink-900 dark:text-slate-100 truncate">{emp.name}</p>
-                          {emp.position && <p className="text-sm text-ink-400 truncate">{emp.position}</p>}
+                          {emp.position && (
+                            <p className="text-sm text-ink-400 truncate">
+                              {stripHtml(emp.position)}
+                            </p>
+                          )}
                         </div>
                       </li>
                     ))}

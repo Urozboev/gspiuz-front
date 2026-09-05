@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Phone, Mail, ArrowUpRight } from "lucide-react";
 import RemoteImage from "@/components/ui/RemoteImage";
-import { fullName, localized, normalizeMediaUrl } from "@/lib/format";
+import { fullName, localized, normalizeMediaUrl, stripHtml } from "@/lib/format";
 import { useApp } from "@/context/AppContext";
 import type { Employee, StaffMember } from "@/lib/types";
 
@@ -27,12 +27,17 @@ export default function EmployeeCard({ employee, href, featured }: EmployeeCardP
     ("full_name" in employee && employee.full_name) ||
     fullName(employee.first_name, employee.last_name, employee.surname);
 
-  const position =
+  /*
+   * Lavozim eski saytdan HTML bilan keladi (`<p><strong>…</strong></p>`).
+   * Kartochkada bu bitta qator yozuv — teglar kerak emas, tozalanadi.
+   */
+  const position = stripHtml(
     typeof employee.position === "string"
       ? employee.position
       : employee.position
         ? localized(employee.position.name, language)
-        : "";
+        : "",
+  );
 
   const inner = (
     <div
@@ -70,7 +75,7 @@ export default function EmployeeCard({ employee, href, featured }: EmployeeCardP
 
         {featured && employee.dec && (
           <p className="mt-4 text-base text-ink-600 dark:text-slate-400 line-clamp-3">
-            {employee.dec}
+            {stripHtml(employee.dec)}
           </p>
         )}
 

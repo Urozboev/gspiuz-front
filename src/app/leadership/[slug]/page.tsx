@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Phone, Mail, MapPin, Building2, Briefcase } from "lucide-react";
 import { useT } from "@/hooks/useT";
 import { useApi } from "@/hooks/useApi";
-import { fullName, localized, normalizeMediaUrl } from "@/lib/format";
+import { fullName, localized, normalizeMediaUrl, stripHtml } from "@/lib/format";
 import { useApp } from "@/context/AppContext";
 import Container from "@/components/ui/Container";
 import RemoteImage from "@/components/ui/RemoteImage";
@@ -47,7 +47,8 @@ export default function LeadershipDetail({ params }: { params: Promise<{ slug: s
   );
 
   const name = emp ? fullName(emp.first_name, emp.last_name, emp.surname) : "";
-  const position = emp ? localized(emp.position?.name, language) : "";
+  // Lavozim HTML bilan kelishi mumkin — sarlavha ostida bitta qator sifatida chiziladi.
+  const position = emp ? stripHtml(localized(emp.position?.name, language)) : "";
   const department = emp ? localized(emp.department?.name, language) : "";
 
   // Joriy tayinlovdan boshqa lavozimlar — "yana" ro'yxati uchun.
