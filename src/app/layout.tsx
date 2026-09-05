@@ -137,7 +137,7 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${dmSans.variable} ${redHat.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white dark:bg-ink-950 text-ink-600 dark:text-ink-300 transition-colors duration-200">
+      <body className="min-h-full flex flex-col bg-mist-100 dark:bg-ink-950 text-ink-600 dark:text-ink-300 transition-colors duration-200">
         <script
           type="application/ld+json"
           // Schema.org ma'lumotlari o'zimiz tuzgan obyektdan keladi, tashqi kirish yo'q.

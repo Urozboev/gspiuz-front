@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useApp } from "@/context/AppContext";
 import { useT } from "@/hooks/useT";
 import { useSiteInfo } from "@/context/SiteInfoContext";
-import { EXTERNAL_LINKS } from "@/lib/config";
+import { EXTERNAL_LINKS, INSTITUTE } from "@/lib/config";
 import { navExtra, admissions, extraPages, events as eventsDict } from "@/locales/sections";
 import type { MenuItem } from "@/lib/types";
 import AccessibilityMenu from "./AccessibilityMenu";
@@ -178,7 +178,8 @@ export default function Header() {
   // Admin menyusi mavjud bo'lsa — o'shani, aks holda belgilangan menyuni ishlatamiz.
   const navItems: NavItem[] = dynamicNav.length > 0 ? dynamicNav : fallbackNav;
 
-  const phone = siteInfo?.phone_number || "+998 55 516 90 00";
+  // Zaxira raqam config'dan olinadi — footer bilan bir manba bo'lsin.
+  const phone = siteInfo?.phone_number || INSTITUTE.phone;
 
   // Ijtimoiy tarmoqlar — faqat manzili kiritilganlari ko'rsatiladi.
   const socials = [
