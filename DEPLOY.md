@@ -170,6 +170,33 @@ cd ~/gspiuz-front
 npm run build
 ```
 
+### Build xotiraga sig'masa (shared hosting)
+
+CloudLinux LVE chegarasi ostida Turbopack WASM uchun xotira ajrata olmaydi:
+
+```
+RangeError: WebAssembly.instantiate(): Out of memory
+Max address space  4294967296  (4 GB)
+```
+
+Yechim — Webpack bilan qurish, u WASM ishlatmaydi:
+
+```bash
+npm run build:webpack
+```
+
+cPanel'da terminal bo'lmasa: **Setup Node.js App** → *Run JS Script* →
+ro'yxatdan **`build:webpack`** ni tanlang.
+
+Natija bir xil — faqat qurish usuli boshqacha, sayt ishlashiga ta'sir
+qilmaydi. Sekinroq quriladi (Turbopack tezroq), lekin chegaraga urilmaydi.
+
+Bu ham yordam bermasa, **Environment variables** ga qo'shing:
+
+```
+NODE_OPTIONS=--max-old-space-size=2048
+```
+
 ### 4. Ishga tushirish
 
 cPanel ekranida **Restart**.
